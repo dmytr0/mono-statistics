@@ -5,21 +5,21 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 
-CREATE SCHEMA mono_stat;
+CREATE SCHEMA IF NOT EXISTS mono_stat;
 
 
-CREATE TABLE mono_stat.statements (
+CREATE TABLE IF NOT EXISTS mono_stat.statements (
   id                VARCHAR(30) NOT NULL PRIMARY KEY,
   time              TIMESTAMP WITHOUT TIME ZONE,
   description       VARCHAR(255),
   mcc               INTEGER,
-  originalMcc       INTEGER,
+  original_mcc      INTEGER,
   amount            INTEGER,
-  operationAmount   INTEGER,
-  currencyCode      INTEGER,
-  commissionRate    INTEGER,
-  cashbackAmount    INTEGER,
+  operation_amount  INTEGER,
+  currency_code     VARCHAR(3),
+  commission_rate   INTEGER,
+  cashback_amount   INTEGER,
   balance           INTEGER,
   hold              BOOLEAN,
-  receiptId         VARCHAR(25)
+  receipt_id        VARCHAR(25)
 );
