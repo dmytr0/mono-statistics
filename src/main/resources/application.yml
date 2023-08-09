@@ -11,9 +11,24 @@ spring:
       ddl-auto: none
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+    open-in-view: false
   flyway:
     locations: classpath:db/migration
+  cache:
+    type: simple
+
 
 client:
   mono:
     auth-token: ${MONO_AUTH_TOKEN}
+
+mono:
+  accounts:
+    cache:
+      ttlInMinutes: 120
+  statement:
+    startDateUnix: 1640995200 # 2022-01-01
+  statistic:
+    supportedCardType:
+      - black
+      - white
