@@ -20,6 +20,7 @@ public class MonoScheduler {
 
     @PostConstruct
     public void schedule() {
+        log.info("TEST TEST TEST");
 //        updateStatementsTask().run();
     }
 

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import static com.dmytr0.mono.monostat.config.CacheConfig.ACCOUNTS_CACHE;
 import static com.dmytr0.mono.monostat.config.CacheConfig.ACCOUNTS_CACHE_MANAGER;
+import static com.dmytr0.mono.monostat.converter.UnixTimeConverter.fromUnixTime;
 import static com.dmytr0.mono.monostat.domain.Currency.UAH;
 
 @Log4j2
@@ -35,23 +36,24 @@ public class StatementService {
     private final StatementConverter statementConverter;
 
     @Cacheable(cacheNames = ACCOUNTS_CACHE, cacheManager = ACCOUNTS_CACHE_MANAGER)
-    public List<String> getUAHAccountIds() {
+    public List<MonoAccount> getUAHAccounts() {
+        log.info("Getting Account Ids");
         return monoApi.getClientInfo().getAccounts().stream()
                 .filter(a -> a.getCurrencyCode() == UAH.getNumericCode())
                 .filter(a -> supportedCardType.contains(a.getType()))
-                .map(MonoAccount::getId)
                 .collect(Collectors.toList());
     }
 
     public long getLatestStatementDate() {
+        log.info("Getting Latest Statement Date");
         return repository.findMaxTime()
                 .map(UnixTimeConverter::toUnixTime)
                 .orElse(statementStartDate);
     }
 
-    public void fetchAndStore(String account, long from, long to) {
-        var monoApiStatements = monoApi.getStatements(account, from, to);
-        var statements = monoApiStatements.stream()
+    public void fetchAndStoreStatements(String account, long from, long to) {
+        log.info("Fetching statements for account: {} from {} to {}", account, fromUnixTime(from), fromUnixTime(to));
+        var statements = monoApi.getStatements(account, from, to).stream()
                 .map(statementConverter::toEntity)
                 .collect(Collectors.toList());
 

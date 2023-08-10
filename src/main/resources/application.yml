@@ -1,4 +1,7 @@
 server.port: 2505
+application:
+  title: Mono statistic
+  version: 0.0.1
 
 spring:
   datasource:
@@ -17,6 +20,8 @@ spring:
   cache:
     type: simple
 
+spring.autoconfigure.exclude: org.springframework.boot.autoconfigure.logging.LoggingAutoConfiguration
+
 
 client:
   mono:
@@ -32,3 +37,4 @@ mono:
     supportedCardType:
       - black
       - white
+
